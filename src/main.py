@@ -3,17 +3,10 @@ import random
 from infotuple import selection_algorithms, metric_learners, body_metrics
 
 
-def create_image_similarity_matrix(num_rows):
+def create_similarity_matrix(num_rows):
     img_similarities = [[random.random()*10 for _ in range(num_rows)] for _ in range(num_rows)]
     print("Image similarity initial matrix: {0}".format(img_similarities))
     return np.array(img_similarities)
-
-
-def is_mouse_pressed(test_mouse):
-    for button in test_mouse.getPressed():
-        if button != 0:
-            return True
-    return False
 
 
 def subject_oracle(target_similarity_matrix):
@@ -49,7 +42,7 @@ def main():
     num_iterations = 20
     tuple_size = 5  # 5 choices
     stim_list = [0, 1, 2, 3, 4]
-    image_similarity_matrix = create_image_similarity_matrix(len(stim_list))  # numImages == (len(stim_list)^2)/2
+    image_similarity_matrix = create_similarity_matrix(len(stim_list))  # numImages == (len(stim_list)^2)/2
     target_similarity_matrix = [
         [100, 50, 30, 20, 10],  # 0
         [50, 100, 70, 60, 80],  # 1
