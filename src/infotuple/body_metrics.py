@@ -110,7 +110,7 @@ def mutual_information(X, head, body, n_samples, dist_std, mu):
     return information
 
 
-def primal_body_selector(head, M, tuples, __, intermediate_params={'mu':0.05, 'tuple_downsample_rate':0.5, 'dist_cache':{}}):
+def primal_body_selector(head, M, tuples, __, intermediate_params={'mu':0.05, 'tuple_downsample_rate':1, 'dist_cache':{}}):
     """
     Inner loop of Algorithm 1, this method selects the tuple body that maximizes our mutual information metric
     Used at each algorithm iteration to compute an optimal query to request, as described in section 3.1.
@@ -147,7 +147,7 @@ def primal_body_selector(head, M, tuples, __, intermediate_params={'mu':0.05, 't
         a = tuples[i][0]
         B = tuples[i][1:]
 
-        infogains[i] = mutual_information(M, a, B, M.shape[0]/3, dist_std, mu)
+        infogains[i] = mutual_information(M, a, B, M.shape[0], dist_std, mu)
 
     selected_tuple = tuples[np.argmax(infogains)]
     

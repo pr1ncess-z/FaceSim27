@@ -31,11 +31,9 @@ def subject_oracle(target_similarity_matrix):
         c_to_score = {}
         for c in candidates:
             c_to_score[c] = target_similarity_matrix[response][c]
-
         # print("c to score: {0}".format(c_to_score))
 
         candidates = sorted(candidates, key=lambda candidate: c_to_score[candidate], reverse=True)
-
         # print("Candidates sorted: {0}".format(candidates))
 
         response_list.extend(candidates)
@@ -48,7 +46,7 @@ def subject_oracle(target_similarity_matrix):
 def main():
     # --- Run the experiment ---
     num_burn_ins = 5
-    num_iterations = 10
+    num_iterations = 20
     tuple_size = 5  # 5 choices
     stim_list = [0, 1, 2, 3, 4]
     image_similarity_matrix = create_image_similarity_matrix(len(stim_list))  # numImages == (len(stim_list)^2)/2
