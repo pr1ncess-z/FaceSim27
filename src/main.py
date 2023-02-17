@@ -1,10 +1,11 @@
+from copy import deepcopy
 import numpy as np
 import random
 from infotuple import selection_algorithms, metric_learners, body_metrics
 
 
 def create_similarity_matrix(num_rows):
-    img_similarities = [[random.random()*10 for _ in range(num_rows)] for _ in range(num_rows)]
+    img_similarities = [[random.random() for _ in range(num_rows)] for _ in range(num_rows)]
     print("Image similarity initial matrix: {0}".format(img_similarities))
     return np.array(img_similarities)
 
@@ -40,7 +41,7 @@ def main():
     # --- Run the experiment ---
     num_burn_ins = 5
     num_iterations = 20
-    tuple_size = 5  # 5 choices
+    tuple_size = 3  # 5 choices
     stim_list = [0, 1, 2, 3, 4]
     image_similarity_matrix = create_similarity_matrix(len(stim_list))  # numImages == (len(stim_list)^2)/2
     target_similarity_matrix = [
@@ -60,7 +61,20 @@ def main():
                                                                         tuple_size,
                                                                         verbose_output=False)
 
-    print(output_similarity_matrix)
+    k_matrix = np.dot(output_similarity_matrix, output_similarity_matrix.T)
+    print(k_matrix)
+
+    # generate new matrix
+    distance_matrix = deepcopy(k_matrix)
+
+    for row_num, row in enumerate(k_matrix):
+        for col_num, cell_value in enumerate(row):
+            distance = k_matrix[row_num][row_num] - 2 * cell_value + \
+                       k_matrix[col_num][col_num]
+            distance_matrix[row_num][col_num] = distance
+
+    print(distance_matrix)
+    print(distance_matrix/distance_matrix.std())
 
 
 if __name__ == "__main__":
