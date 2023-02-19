@@ -39,8 +39,8 @@ def subject_oracle(target_similarity_matrix):
 
 def main():
     # --- Run the experiment ---
-    num_burn_ins = 5
-    num_iterations = 20
+    num_burn_ins = 10
+    num_iterations = 200
     tuple_size = 3  # 5 choices
     stim_list = [0, 1, 2, 3, 4]
     image_similarity_matrix = create_similarity_matrix(len(stim_list))  # numImages == (len(stim_list)^2)/2
@@ -52,6 +52,14 @@ def main():
         [10, 80, 90, 55, 100]   # 4
     ]
 
+    hundred_matrix = [
+        [100, 100, 100, 100, 100],  # 0
+        [100, 100, 100, 100, 100],  # 1
+        [100, 100, 100, 100, 100],  # 2
+        [100, 100, 100, 100, 100],  # 3
+        [100, 100, 100, 100, 100]  # 4
+    ]
+
     output_similarity_matrix = selection_algorithms.selection_algorithm(image_similarity_matrix,
                                                                         num_burn_ins,
                                                                         num_iterations,
@@ -61,6 +69,17 @@ def main():
                                                                         tuple_size,
                                                                         verbose_output=False)
 
+    output_matrix = deepcopy(output_similarity_matrix)
+    for row_num, row in enumerate(output_similarity_matrix):
+        for row_num_2 in range(output_similarity_matrix.shape[0]):
+            dist = np.linalg.norm(output_similarity_matrix[row_num_2] - row)
+            output_matrix[row_num][row_num_2] = dist
+
+    print(output_matrix)
+
+    print(np.corrcoef((np.subtract(hundred_matrix, target_similarity_matrix).flatten()), output_matrix.flatten()))
+
+    """
     k_matrix = np.dot(output_similarity_matrix, output_similarity_matrix.T)
     print(k_matrix)
 
@@ -75,6 +94,7 @@ def main():
 
     print(distance_matrix)
     print(distance_matrix/distance_matrix.std())
+    """
 
 
 if __name__ == "__main__":
